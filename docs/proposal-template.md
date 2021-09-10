@@ -3,7 +3,7 @@ Team name: Team Stonks
 Team members:
 
 * Alec DeVries
-*
+* Chase Mulder
 *
 *
 
