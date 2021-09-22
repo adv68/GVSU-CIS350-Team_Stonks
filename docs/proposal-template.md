@@ -4,8 +4,8 @@ Team members:
 
 * Alec DeVries
 * Chase Mulder
-*
-*
+* 
+* Chase Kinard
 
 # Introduction
 
