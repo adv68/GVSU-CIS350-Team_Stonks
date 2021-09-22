@@ -9,7 +9,7 @@ Team members:
 
 # Introduction
 
-Our project idea is to build an IoT device based off of a Raspberry Pi that watches stock tickers. An embedded web server will allow the user to choose different views, different tickers, and any other features we decide to implement. Connected to the Raspberry Pi will be some sort of [LED or LCD Display](https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices) that outputs the current price of a selected stock (or stocks) and/or some other relative data.
+Our project idea is to build an IoT device based off of a Raspberry Pi that watches stock tickers. An embedded web server will allow the user to choose different views, different tickers, and any other features we decide to implement. ~~Connected to the Raspberry Pi will be some sort of [LED or LCD Display](https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices)~~ When you plug the pi into a monitor, an terminal app will start that outputs the current price of a selected stock (or stocks) and/or some other relative data.
 
 # Anticipated Technologies
 
@@ -29,11 +29,11 @@ Use HTML and PHP to create a secure login portal backed by MariaDB. MariaDB also
 Use Java to create a terminal process that runs on startup. Process has three background threads:
 * First thread will monitor database for configuration changes and updates the app accordingly
 * Second thread will monitor [Yahoo Finance using a 3rd party API](https://financequotes-api.com/) to get stock data for chosen tickers
-* Third thread will run Python scripts to manage screen
+* Third thread will ~~run Python scripts~~ use [nCurses](https://webfolderio.github.io/curses4j/) to manage screen
 
 ## Screen Display Controller
 
-Use Python libraries to control LED screen. Most LED displays we have seen have python libraries that are distributed with them so this seems to be the easiest route to follow to manage the screen.
+~~Use Python libraries to control LED screen. Most LED displays we have seen have python libraries that are distributed with them so this seems to be the easiest route to follow to manage the screen.~~ Use nCurses with the Java wrapper curses4j to output data to the terminal. nCurses allows to make an ASCII-based gui of a sort within the terminal, allowing us to still run a lightweight GUI-less OS on the pi.
 
 # Estimated Timeline
 
@@ -46,7 +46,7 @@ Use Python libraries to control LED screen. Most LED displays we have seen have 
     * Determine code structure - UML, etc?
 * Acquire Hardware
     * Raspberry Pi
-    * LED Display
+    * ~~LED Display~~
     * Hardware and Connectors to connect the two
     * Power Supplies
     * __After__ hardware is obtained, install OS and all necessary packages and assemble any electronic components that need assembly.
