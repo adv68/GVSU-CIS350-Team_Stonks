@@ -4,7 +4,7 @@ Team members:
 
 * Alec DeVries
 * Chase Mulder
-* 
+* Simon Hillebrands
 * Chase Kinard
 
 # Introduction
@@ -80,4 +80,4 @@ Use Java to create a terminal process that runs on startup. Process has three ba
 
 # Anticipated Problems
 
-(Describe any problems you foresee that you will need to overcome)
+There is a bit of a learning curve as not everyone is 100% familiar with all the technologies we will be working on.
