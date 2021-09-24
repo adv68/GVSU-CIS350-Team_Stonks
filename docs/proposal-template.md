@@ -81,3 +81,4 @@ Use Java to create a terminal process that runs on startup. Process has three ba
 # Anticipated Problems
 
 There is a bit of a learning curve as not everyone is 100% familiar with all the technologies we will be working on.
+Only one person will have physical access to the pi and led screen so this could also cause issues if more then one person wants to work on the led screen.
