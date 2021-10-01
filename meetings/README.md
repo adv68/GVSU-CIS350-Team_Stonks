@@ -4,23 +4,23 @@ Hold a team meeting at least once a week in some format.  Copy the following tem
 
 ## Meeting minutes template
 
-Team name:
+Team name: Team Stonks
 
-Members present:
+Members present: All
 
-Date:
+Date: 9/30/21
 
-Time:
+Time: 9pm
 
 Discussion points: 
 
-*
-*
-*
+* HW3
+* Progres
+* Goals
 
 Goals for next week (include responsibilities)
 
-*
-*
-*
+* Figure out how to connect a phone app to raspberry pi
+* Figure out microphone setup on raspberry pi
+* Creation of use-case diagrams
 
