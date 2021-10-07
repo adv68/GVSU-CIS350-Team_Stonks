@@ -26,6 +26,7 @@ This document outlines the software requirements for the project. Listed below a
     1.	The web console shall load in a reasonable amount of time (1-2 seconds max).
     2.	The web console shall have an intuitive UI.
     3.	The web console shall be visually appealing.
+    4. The web console shall be behind a login page.
 2. Stock Ticker Display Feature - The disply output of the stock data
     1. The stock ticker shall update within 5 seconds.
     2. The stock ticker shall be color-coded based on whether the stock price is up or down.
