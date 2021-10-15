@@ -9,6 +9,7 @@ Raspberry-Pi based IoT device that watches stock tickers and displays them on a 
 * [Simon Hillebrands](https://github.com/SimonHillebrands/CIS350-HW2-Hillebrands)
 * Member 3 (Role 5, Role 6)
 * [Chase Kinard](https://github.com/kinardc/CIS350-HW2-Kinard)
+* [Chase Mulder](https://github.com/ChaseMulder/CIS350-HW2--Mulder)
 
 ## Prerequisites
 
