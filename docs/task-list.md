@@ -1,4 +1,4 @@
-##Completed
+## Completed
 1. Name: Gantt Chart  
    Description: Make a schedule   
    Expected Time to Complete: 1 week  
@@ -9,7 +9,7 @@
    Expected Time to Complete: 1 week  
    Responsible: Group  
 
-##Not Yet Completed
+## Not Yet Completed
 1. Name: Prototyping  
    Description: Fabricate a prototype with the parts we’ve acquired.  
    Expected Time to Complete: 1-2 weeks  
