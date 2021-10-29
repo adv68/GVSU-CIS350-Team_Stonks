@@ -4,7 +4,7 @@ This is a guide to installing all the tools necessary to build and run the proje
 
 ## Install prerequisites
 
-1. Install [xampp webserver package](https://www.apachefriends.org/download.html). Only Apache, PHP, and MySQL (actually MariaDB in xampp) are required to run the software.
+1. Install [xampp webserver package](https://www.apachefriends.org/download.html). Only Apache, PHP, MySQL (actually MariaDB in xampp), and PhpMyAdmin are required to run the software.
 2. Install [Java OpenJDK 16](https://jdk.java.net/archive/).
 3. (Optional) Install a Java IDE. The project will be build from IntelliJ, so installing IntelliJ is recommended.
 
