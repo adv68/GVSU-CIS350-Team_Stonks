@@ -53,7 +53,7 @@
 
             nav {
                 background-color: #000000;
-                padding: 1%;
+                padding: 5px;
             }
 
             #logout {
@@ -72,15 +72,21 @@
             .center-contents {
                 width: 100%;
             }
+
+            input {
+                padding: 1%;
+            }
             
             input[type=text] {
-                width: 20%;
+                width: 75%;
+                max-width: 500px;
                 margin: 1% auto;
                 display: block;
             }
 
             input[type=submit] {
-                width: 20%;
+                width: 75%;
+                max-width: 400px;
                 margin: 1% auto;
                 display: block;
                 background-color: #bd3333;
@@ -94,29 +100,32 @@
             }
 
             h3 {
-                width: 20%;
+                width: 75%;
+                max-width: 500px;
                 margin: 1% auto;
                 display: block;
             }
 
             h4 {
-                width: 20%;
+                width: 75%;
+                max-width: 500px;
                 margin: 1% auto;
                 display: block;
                 font-style: italic;
             }
 
             #radioContainer {
-                width: 30%;
+                width: 75%;
+                max-width: 500px;
                 margin: 1% auto;
             }
 
             .radioLabelSurround {
-                width: 30%;
+                width: 27%;
                 display: inline-block;
                 border: 2px solid #000000;
-                margin: 2px;
-                padding: 2px;
+                margin: 1%;
+                padding: 1%;
             }
         </style>
     </head>

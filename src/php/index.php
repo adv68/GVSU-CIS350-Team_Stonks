@@ -32,7 +32,8 @@
             }
 
             input {
-                width: 20%;
+                width: 75%;
+                max-width: 500px;
                 padding: 2%;
                 border: 2px solid #000000;
                 margin: 3% auto;
