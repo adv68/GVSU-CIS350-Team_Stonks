@@ -1,5 +1,7 @@
 package com.stonks.code;
 
+import java.util.ArrayList;
+
 public class StockTickers {
     private String layoutStyle;
     private String singleTicker;
@@ -57,5 +59,18 @@ public class StockTickers {
 
     public String getManyTicker5() {
         return manyTicker5;
+    }
+
+    public ArrayList<String> getList() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add(singleTicker);
+        list.add(doubleTicker1);
+        list.add(doubleTicker2);
+        list.add(manyTicker1);
+        list.add(manyTicker2);
+        list.add(manyTicker3);
+        list.add(manyTicker4);
+        list.add(manyTicker5);
+        return list;
     }
 }
