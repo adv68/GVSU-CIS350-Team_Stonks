@@ -107,10 +107,10 @@ public class StockTickerManager {
         }
     }
 
-    /*
+
     public static StockQuote getStockPrice(Stock ticker) throws IOException {
         return ticker.getQuote(true);
     }
 
-     */
+     
 }
