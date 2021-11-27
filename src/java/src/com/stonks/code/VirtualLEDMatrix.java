@@ -2,47 +2,106 @@ package com.stonks.code;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 
 public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
     private JFrame frame;
 
-    private LEDMatrixPanel panel;
+    private JPanel panel;
+
+    private LEDMatrixPanel matrixPanel;
 
 
-
-    public VirtualLEDMatrix(int width, int height) {
+    public VirtualLEDMatrix() {
 
         this.frame = new JFrame("Virtual LED Matrix");
 
-        this.panel = new LEDMatrixPanel();
-        this.panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(),
-                BorderFactory.createRaisedSoftBevelBorder()));
+        this.panel = new JPanel();
+        this.panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15),
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 10)));
         this.panel.setBackground(Color.BLACK);
-        this.panel.setSize(width * 5, height * 5);
 
+        this.matrixPanel = new LEDMatrixPanel(16);
+        this.panel.add(this.matrixPanel);
 
+        this.frame.getContentPane().add(this.panel);
+        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.frame.validate();
+        this.frame.setVisible(true);
+        this.frame.pack();
 
     }
 
 
     private class LEDMatrixPanel extends JPanel {
 
+        private ArrayList<Diode> diodes;
+
+        public LEDMatrixPanel(int mult) {
+
+            int width = 64 * mult;
+            int height = 32 * mult;
+
+            this.setPreferredSize(new Dimension(width, height));
+
+            this.diodes = new ArrayList<>();
+
+        }
+
+        public void add(Diode d) {
+
+            this.diodes.add(d);
+            this.repaint();
+
+        }
+
         @Override
         protected void paintComponent(Graphics g) {
 
             super.paintComponent(g);
 
-            for (int i = 0; i < this.getSize().getHeight(); i++) {
+            Graphics2D panelBackground = (Graphics2D) g.create();
+            panelBackground.setColor(Color.BLACK);
+            panelBackground.fill(new Rectangle(this.getWidth(), this.getHeight()));
 
-                for (int j = 0; j < this.getSize().getWidth(); j++) {
+            for (int i = 0; i < 32; i++) {
 
-                    g.drawOval(i, j, 2, 2);
-                    g.fillOval(i, j, 2, 2);
+                for (int j = 0; j < 64; j++) {
+
+                    panelBackground.setColor(Color.DARK_GRAY);
+                    panelBackground.fill(new Ellipse2D.Double(j * 16, i * 16, 14, 14));
 
                 }
 
             }
+
+            for (Diode diode : diodes) {
+
+                panelBackground.setColor(new Color(diode.r, diode.g, diode.b));
+                panelBackground.fill(new Ellipse2D.Double(diode.x * 16, diode.y * 16, 14, 14));
+
+            }
+
+        }
+
+    }
+
+    private static class Diode extends Point {
+
+        private int r;
+
+        private int g;
+
+        private int b;
+
+        public Diode(int x, int y, int r, int g, int b) {
+
+            super(x, y);
+            this.r = r;
+            this.g = g;
+            this.b = b;
 
         }
 
@@ -51,14 +110,39 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
     public void setPixel(int x, int y, int r, int g, int b) {
 
-        // what rgb are we given if there's supposed to be no color?
+        this.matrixPanel.add(new Diode(x, y, r, g, b));
 
     }
 
 
     public static void main(String[] args) {
 
-        VirtualLEDMatrix test = new VirtualLEDMatrix(64, 32);
+        VirtualLEDMatrix test = new VirtualLEDMatrix();
+
+        test.setPixel(11, 11, 255, 0, 0);
+        test.setPixel(11, 12, 255, 0, 0);
+        test.setPixel(11, 13, 255, 0, 0);
+        test.setPixel(11, 14, 255, 0, 0);
+        test.setPixel(11, 15, 255, 0, 0);
+
+        test.setPixel(12, 13, 255, 0, 0);
+        test.setPixel(13, 13, 255, 0, 0);
+
+        test.setPixel(14, 11, 255, 0, 0);
+        test.setPixel(14, 12, 255, 0, 0);
+        test.setPixel(14, 13, 255, 0, 0);
+        test.setPixel(14, 14, 255, 0, 0);
+        test.setPixel(14, 15, 255, 0, 0);
+
+
+        test.setPixel(16, 12, 0, 255, 0);
+        test.setPixel(16, 14, 0, 255, 0);
+        test.setPixel(16, 15, 0, 255, 0);
+
+        test.setPixel(18, 11, 0, 0, 255);
+        test.setPixel(18, 12, 0, 0, 255);
+        test.setPixel(18, 13, 0, 0, 255);
+        test.setPixel(18, 15, 0, 0, 255);
 
     }
 
