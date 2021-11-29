@@ -112,5 +112,5 @@ public class StockTickerManager {
         return ticker.getQuote(true);
     }
 
-     
+
 }

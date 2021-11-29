@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
@@ -12,7 +13,6 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
     private JPanel panel;
 
     private LEDMatrixPanel matrixPanel;
-
 
     public VirtualLEDMatrix() {
 
@@ -37,7 +37,8 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
     private class LEDMatrixPanel extends JPanel {
 
-        private ArrayList<Diode> diodes;
+        //private ArrayList<Diode> diodes;
+        HashMap<String, Diode> diodes;
 
         public LEDMatrixPanel(int mult) {
 
@@ -46,13 +47,14 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
             this.setPreferredSize(new Dimension(width, height));
 
-            this.diodes = new ArrayList<>();
-
+            //this.diodes = new ArrayList<>();
+            this.diodes = new HashMap<>();
         }
 
         public void add(Diode d) {
 
-            this.diodes.add(d);
+            //this.diodes.add(d);
+            this.diodes.put("" + d.x + "-" + d.y, d);
             this.repaint();
 
         }
@@ -70,15 +72,17 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
                 for (int j = 0; j < 64; j++) {
 
-                    panelBackground.setColor(Color.DARK_GRAY);
+                    //panelBackground.setColor(Color.DARK_GRAY);
+                    panelBackground.setColor(Color.BLACK);
                     panelBackground.fill(new Ellipse2D.Double(j * 16, i * 16, 14, 14));
 
                 }
 
             }
 
-            for (Diode diode : diodes) {
-
+            //for (Diode diode : diodes) {
+            for (String s : diodes.keySet()) {
+                Diode diode = diodes.get(s);
                 panelBackground.setColor(new Color(diode.r, diode.g, diode.b));
                 panelBackground.fill(new Ellipse2D.Double(diode.x * 16, diode.y * 16, 14, 14));
 
@@ -143,6 +147,15 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
         test.setPixel(18, 12, 0, 0, 255);
         test.setPixel(18, 13, 0, 0, 255);
         test.setPixel(18, 15, 0, 0, 255);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {}
+
+        test.setPixel(18, 15, 255, 255, 255);
+
+        test.setPixel(0, 0, 255, 0, 0);
+        test.setPixel(63, 31, 255, 0, 0);
 
     }
 
