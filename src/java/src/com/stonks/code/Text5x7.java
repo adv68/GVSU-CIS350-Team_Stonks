@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import static com.stonks.code.Font5x7.*;
 
 public class Text5x7 {
-    static ArrayList<String[]> getLetters(String str) {
+    public static ArrayList<String[]> getLetters(String str) {
         ArrayList<String[]> list = new ArrayList<>();
         char [] array = str.toUpperCase().toCharArray();
         for(char ch : array) {
