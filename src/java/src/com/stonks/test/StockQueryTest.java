@@ -9,7 +9,6 @@ import yahoofinance.quotes.stock.StockQuote;
 
 import java.io.IOException;
 
-import org.junit.jupiter.*;
 
 public class StockQueryTest {
     public static void main(String[] args) {

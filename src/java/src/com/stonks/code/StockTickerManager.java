@@ -93,17 +93,19 @@ public class StockTickerManager {
     }
 
     public void refreshQuotes() {
-        writeLock.lock();
-        try {
+        if (initialized) {
+            writeLock.lock();
             try {
-                for (String s : stocks.keySet()) {
-                    stocks.get(s).getQuote(true);
+                try {
+                    for (String s : stocks.keySet()) {
+                        stocks.get(s).getQuote(true);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } finally {
+                writeLock.unlock();
             }
-        } finally {
-            writeLock.unlock();
         }
     }
 

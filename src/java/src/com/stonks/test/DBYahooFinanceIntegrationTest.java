@@ -6,7 +6,6 @@ import com.stonks.code.StockTickerManager;
 
 import java.io.IOException;
 
-import org.junit.jupiter.*;
 
 public class DBYahooFinanceIntegrationTest {
     public static void main(String[] args) {
