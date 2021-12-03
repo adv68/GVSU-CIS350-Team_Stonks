@@ -1,6 +1,7 @@
 package com.stonks.test;
 
 import java.sql.*;
+import org.junit.jupiter.*;
 
 public class SQLTest {
 

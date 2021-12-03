@@ -21,7 +21,7 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
         this.panel = new JPanel();
         this.panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15),
                 BorderFactory.createLineBorder(Color.DARK_GRAY, 10)));
-        this.panel.setBackground(Color.BLACK);
+//        this.panel.setBackground(Color.BLACK);
 
         this.matrixPanel = new LEDMatrixPanel(16);
         this.panel.add(this.matrixPanel);
