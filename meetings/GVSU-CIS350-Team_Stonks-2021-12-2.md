@@ -1,11 +1,12 @@
 ## Meeting
+
 Team name: Team Stonks
 
 Members present: All
 
-Date: 12/2/21
+Date: December 2, 2021
 
-Time:8:30-10
+Time: 8:30
 
 Discussion points: 
 
