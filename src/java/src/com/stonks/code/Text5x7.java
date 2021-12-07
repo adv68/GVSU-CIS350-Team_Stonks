@@ -95,6 +95,8 @@ public class Text5x7 {
                 list.add(plus);
             } else if (ch == ' ') {
                 list.add(space);
+            } else if (ch == '|') {
+                list.add(bar);
             }
         }
         return list;

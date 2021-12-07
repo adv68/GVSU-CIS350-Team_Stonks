@@ -431,4 +431,14 @@ public class Font5x7 {
             "     ",
             "     "
     };
+
+    static String[] bar = {
+            "  0  ",
+            "  0  ",
+            "  0  ",
+            "  0  ",
+            "  0  ",
+            "  0  ",
+            "  0  "
+    };
 }

@@ -5,8 +5,11 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
+public class VirtualLEDMatrix implements LEDMatrix {
 
     private JFrame frame;
 
@@ -21,7 +24,6 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
         this.panel = new JPanel();
         this.panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15),
                 BorderFactory.createLineBorder(Color.DARK_GRAY, 10)));
-//        this.panel.setBackground(Color.BLACK);
 
         this.matrixPanel = new LEDMatrixPanel(16);
         this.panel.add(this.matrixPanel);
@@ -36,9 +38,7 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
 
 
     private class LEDMatrixPanel extends JPanel {
-
-        //private ArrayList<Diode> diodes;
-        HashMap<String, Diode> diodes;
+        ConcurrentHashMap<String, Diode> diodes;
 
         public LEDMatrixPanel(int mult) {
 
@@ -46,17 +46,12 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
             int height = 32 * mult;
 
             this.setPreferredSize(new Dimension(width, height));
-
-            //this.diodes = new ArrayList<>();
-            this.diodes = new HashMap<>();
+            this.diodes = new ConcurrentHashMap<>();
         }
 
         public void add(Diode d) {
-
-            //this.diodes.add(d);
             this.diodes.put("" + d.x + "-" + d.y, d);
             this.repaint();
-
         }
 
         @Override
@@ -68,17 +63,11 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
             panelBackground.setColor(Color.BLACK);
             panelBackground.fill(new Rectangle(this.getWidth(), this.getHeight()));
 
-
-            //for (Diode diode : diodes) {
-            for (String s : diodes.keySet()) {
-                Diode diode = diodes.get(s);
+            diodes.forEach((key, diode) -> {
                 panelBackground.setColor(new Color(diode.r, diode.g, diode.b));
                 panelBackground.fill(new Ellipse2D.Double(diode.x * 16, diode.y * 16, 14, 14));
-
-            }
-
+            });
         }
-
     }
 
     private static class Diode extends Point {
