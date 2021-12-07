@@ -40,6 +40,8 @@ public class LEDPanelUpdater implements Runnable {
             for (int j = 0; j < row.length(); j++) {
                 if (row.charAt(j) == '0') {
                     ledMatrix.setPixel(j + 1, i + (line * 8), 255, 255, 255);
+                } else {
+                    ledMatrix.setPixel(j + 1, i + (line * 8), 0, 0, 0);
                 }
             }
         }
