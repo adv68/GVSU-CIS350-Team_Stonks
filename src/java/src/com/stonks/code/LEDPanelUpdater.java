@@ -3,6 +3,8 @@ package com.stonks.code;
 import yahoofinance.Stock;
 import yahoofinance.quotes.stock.StockQuote;
 
+import java.awt.*;
+import java.math.BigDecimal;
 import javax.swing.*;
 import java.math.BigDecimal;
 import java.time.ZoneId;
@@ -28,13 +30,33 @@ public class LEDPanelUpdater implements Runnable {
     }
 
     // line is 0 - 3
-    private void writeToPanel (int line, String text, int r, int g, int b) {
+    private void writeToPanel (int line, StockQuote quote, String text) {
+
+        Color changeColor;
+        String marker;
+        if (quote.getChange().compareTo(new BigDecimal(0)) > 0) {
+            changeColor = new Color(0, 0, 255);
+            marker = "↑";
+        } else if (quote.getChange().compareTo(new BigDecimal(0)) < 0) {
+            changeColor = new Color(255, 0, 0);
+            marker = "↓";
+        } else {
+            changeColor = new Color(200, 200, 200);
+            marker = "-";
+        }
+
+        if (text.contains(quote.getSymbol())) {
+            text = text.replace(quote.getSymbol(), marker + quote.getSymbol());
+        }
+
         ArrayList<String[]> chars;
-        if (text.length() > 10) {
-            chars = Text5x7.getLetters(text.substring(0, 10));
+
+        if (text.length() > 11) {
+            chars = Text5x7.getLetters(text.substring(0, 11));
         } else {
             chars = Text5x7.getLetters(text);
         }
+
         for (int i = 0; i < 7; i++) {
             String row = "";
             for (String[] s : chars) {
@@ -44,9 +66,13 @@ public class LEDPanelUpdater implements Runnable {
 
             for (int j = 0; j < row.length(); j++) {
                 if (row.charAt(j) == '0') {
-                    ledMatrix.setPixel(j + 2, i + 1 + (line * 8), r, g, b);
+                    if (text.charAt(j / 6) == '↑' || text.charAt(j / 6) == '↓' || text.contains(".")) {
+                        ledMatrix.setPixel(j + 1, i + (line * 8), changeColor);
+                    } else {
+                        ledMatrix.setPixel(j + 1, i + (line * 8), new Color(255, 255, 255));
+                    }
                 } else {
-                    ledMatrix.setPixel(j + 2, i + 1 + (line * 8), 0, 0, 0);
+                    ledMatrix.setPixel(j + 1, i + (line * 8), new Color(0, 0, 0));
                 }
             }
         }
@@ -135,17 +161,33 @@ public class LEDPanelUpdater implements Runnable {
                 } else if (volume < 1000000000000L){
                     writeToPanel(3, "Vol " + volume / 1000000000 + "B");
                 }
+            }
+            if (stockTickers.getLayoutStyle().equals("double")) {
+                StockQuote quote1 = stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1());
+                StockQuote quote2 = stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2());
 
-            } else if (stockTickers.getLayoutStyle().equals("double")) {
+                writeToPanel(0, quote1, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1()).getSymbol());
+                writeToPanel(1, quote1, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1()).getPrice().toString());
 
-            } else {
+                writeToPanel(2, quote2, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2()).getSymbol());
+                writeToPanel(3, quote2, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2()).getPrice().toString());
+            }
+            if (stockTickers.getLayoutStyle().equals("many")) {
+                StockQuote quote1 = stockTickerManager.getStockQuote(stockTickers.getManyTicker1());
+                StockQuote quote2 = stockTickerManager.getStockQuote(stockTickers.getManyTicker2());
+                StockQuote quote3 = stockTickerManager.getStockQuote(stockTickers.getManyTicker3());
+                StockQuote quote4 = stockTickerManager.getStockQuote(stockTickers.getManyTicker4());
 
+                writeToPanel(0, quote1, stockTickerManager.getStockQuote(stockTickers.getManyTicker1()).getSymbol());
+                writeToPanel(1, quote2, stockTickerManager.getStockQuote(stockTickers.getManyTicker2()).getSymbol());
+                writeToPanel(2, quote3, stockTickerManager.getStockQuote(stockTickers.getManyTicker3()).getSymbol());
+                writeToPanel(3, quote4, stockTickerManager.getStockQuote(stockTickers.getManyTicker4()).getSymbol());
             }
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                
+
             }
             /*
             writeToPanel(0, stockTickers.getDoubleTicker1());
@@ -163,8 +205,6 @@ public class LEDPanelUpdater implements Runnable {
             } catch (InterruptedException e) {
 
             }
-
-             */
         }
     }
 }
