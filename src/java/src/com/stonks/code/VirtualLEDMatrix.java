@@ -68,17 +68,6 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
             panelBackground.setColor(Color.BLACK);
             panelBackground.fill(new Rectangle(this.getWidth(), this.getHeight()));
 
-            for (int i = 0; i < 32; i++) {
-
-                for (int j = 0; j < 64; j++) {
-
-                    //panelBackground.setColor(Color.DARK_GRAY);
-                    panelBackground.setColor(Color.BLACK);
-                    panelBackground.fill(new Ellipse2D.Double(j * 16, i * 16, 14, 14));
-
-                }
-
-            }
 
             //for (Diode diode : diodes) {
             for (String s : diodes.keySet()) {
@@ -119,44 +108,44 @@ public class VirtualLEDMatrix extends JFrame implements LEDMatrix {
     }
 
 
-    public static void main(String[] args) {
-
-        VirtualLEDMatrix test = new VirtualLEDMatrix();
-
-        test.setPixel(11, 11, 255, 0, 0);
-        test.setPixel(11, 12, 255, 0, 0);
-        test.setPixel(11, 13, 255, 0, 0);
-        test.setPixel(11, 14, 255, 0, 0);
-        test.setPixel(11, 15, 255, 0, 0);
-
-        test.setPixel(12, 13, 255, 0, 0);
-        test.setPixel(13, 13, 255, 0, 0);
-
-        test.setPixel(14, 11, 255, 0, 0);
-        test.setPixel(14, 12, 255, 0, 0);
-        test.setPixel(14, 13, 255, 0, 0);
-        test.setPixel(14, 14, 255, 0, 0);
-        test.setPixel(14, 15, 255, 0, 0);
-
-
-        test.setPixel(16, 12, 0, 255, 0);
-        test.setPixel(16, 14, 0, 255, 0);
-        test.setPixel(16, 15, 0, 255, 0);
-
-        test.setPixel(18, 11, 0, 0, 255);
-        test.setPixel(18, 12, 0, 0, 255);
-        test.setPixel(18, 13, 0, 0, 255);
-        test.setPixel(18, 15, 0, 0, 255);
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {}
-
-        test.setPixel(18, 15, 255, 255, 255);
-
-        test.setPixel(0, 0, 255, 0, 0);
-        test.setPixel(63, 31, 255, 0, 0);
-
-    }
+//    public static void main(String[] args) {
+//
+//        VirtualLEDMatrix test = new VirtualLEDMatrix();
+//
+//        test.setPixel(11, 11, 255, 0, 0);
+//        test.setPixel(11, 12, 255, 0, 0);
+//        test.setPixel(11, 13, 255, 0, 0);
+//        test.setPixel(11, 14, 255, 0, 0);
+//        test.setPixel(11, 15, 255, 0, 0);
+//
+//        test.setPixel(12, 13, 255, 0, 0);
+//        test.setPixel(13, 13, 255, 0, 0);
+//
+//        test.setPixel(14, 11, 255, 0, 0);
+//        test.setPixel(14, 12, 255, 0, 0);
+//        test.setPixel(14, 13, 255, 0, 0);
+//        test.setPixel(14, 14, 255, 0, 0);
+//        test.setPixel(14, 15, 255, 0, 0);
+//
+//
+//        test.setPixel(16, 12, 0, 255, 0);
+//        test.setPixel(16, 14, 0, 255, 0);
+//        test.setPixel(16, 15, 0, 255, 0);
+//
+//        test.setPixel(18, 11, 0, 0, 255);
+//        test.setPixel(18, 12, 0, 0, 255);
+//        test.setPixel(18, 13, 0, 0, 255);
+//        test.setPixel(18, 15, 0, 0, 255);
+//
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {}
+//
+//        test.setPixel(18, 15, 255, 255, 255);
+//
+//        test.setPixel(0, 0, 255, 0, 0);
+//        test.setPixel(63, 31, 255, 0, 0);
+//
+//    }
 
 }
