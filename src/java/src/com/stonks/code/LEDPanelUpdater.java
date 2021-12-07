@@ -47,8 +47,6 @@ public class LEDPanelUpdater implements Runnable {
 
     @Override
     public void run() {
-
-
         for (;;) {
 
             StockTickers stockTickers = DatabaseQuery.getStockTickers(connectionUrl, username, password);
