@@ -3,6 +3,7 @@ package com.stonks.test;
 import com.stonks.code.Text5x7;
 import com.stonks.code.VirtualLEDMatrix;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class TestLedPanel {
@@ -19,7 +20,7 @@ public class TestLedPanel {
 
             for (int f = 0; f < row.length(); f++) {
                 if (row.charAt(f) == '0') {
-                    matrix.setPixel(f, i, 255, 255, 255);
+                    matrix.setPixel(f, i, new Color(255, 255, 255));
                 }
             }
         }

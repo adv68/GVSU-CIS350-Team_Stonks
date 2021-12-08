@@ -95,6 +95,10 @@ public class Text5x7 {
                 list.add(plus);
             } else if (ch == ' ') {
                 list.add(space);
+            } else if (ch == '↑') {     //alt + 24
+                list.add(inc);
+            } else if (ch == '↓') {     //alt + 25
+                list.add(dec);
             } else if (ch == '|') {
                 list.add(bar);
             }
@@ -116,7 +120,7 @@ public class Text5x7 {
                 System.out.print(s[i]);
                 System.out.print("   ");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 

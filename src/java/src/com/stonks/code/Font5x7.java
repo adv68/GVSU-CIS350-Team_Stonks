@@ -432,6 +432,27 @@ public class Font5x7 {
             "     "
     };
 
+    //chase k. added these
+    static String[] inc = {
+            "     ",
+            "     ",
+            "  0  ",
+            " 000 ",
+            "00000",
+            "     ",
+            "     "
+    };
+
+    static String[] dec = {
+            "     ",
+            "     ",
+            "00000",
+            " 000 ",
+            "  0  ",
+            "     ",
+            "     "
+    };
+
     static String[] bar = {
             "  0  ",
             "  0  ",

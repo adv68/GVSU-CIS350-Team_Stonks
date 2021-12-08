@@ -1,5 +1,7 @@
 package com.stonks.code;
 
+import java.awt.*;
+
 public interface LEDMatrix {
-    void setPixel(int x, int y, int r, int g, int b);
+    void setPixel(int x, int y, Color rgb);
 }

@@ -90,51 +90,10 @@ public class VirtualLEDMatrix implements LEDMatrix {
     }
 
 
-    public void setPixel(int x, int y, int r, int g, int b) {
+    public void setPixel(int x, int y, Color rgb) {
 
-        this.matrixPanel.add(new Diode(x, y, r, g, b));
+        this.matrixPanel.add(new Diode(x, y, rgb.getRed(), rgb.getBlue(), rgb.getGreen()));
 
     }
-
-
-//    public static void main(String[] args) {
-//
-//        VirtualLEDMatrix test = new VirtualLEDMatrix();
-//
-//        test.setPixel(11, 11, 255, 0, 0);
-//        test.setPixel(11, 12, 255, 0, 0);
-//        test.setPixel(11, 13, 255, 0, 0);
-//        test.setPixel(11, 14, 255, 0, 0);
-//        test.setPixel(11, 15, 255, 0, 0);
-//
-//        test.setPixel(12, 13, 255, 0, 0);
-//        test.setPixel(13, 13, 255, 0, 0);
-//
-//        test.setPixel(14, 11, 255, 0, 0);
-//        test.setPixel(14, 12, 255, 0, 0);
-//        test.setPixel(14, 13, 255, 0, 0);
-//        test.setPixel(14, 14, 255, 0, 0);
-//        test.setPixel(14, 15, 255, 0, 0);
-//
-//
-//        test.setPixel(16, 12, 0, 255, 0);
-//        test.setPixel(16, 14, 0, 255, 0);
-//        test.setPixel(16, 15, 0, 255, 0);
-//
-//        test.setPixel(18, 11, 0, 0, 255);
-//        test.setPixel(18, 12, 0, 0, 255);
-//        test.setPixel(18, 13, 0, 0, 255);
-//        test.setPixel(18, 15, 0, 0, 255);
-//
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {}
-//
-//        test.setPixel(18, 15, 255, 255, 255);
-//
-//        test.setPixel(0, 0, 255, 0, 0);
-//        test.setPixel(63, 31, 255, 0, 0);
-//
-//    }
 
 }
