@@ -145,7 +145,7 @@ public class LEDPanelUpdater implements Runnable {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                
+
             }
             /*
             writeToPanel(0, stockTickers.getDoubleTicker1());
