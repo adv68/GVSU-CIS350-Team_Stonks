@@ -440,7 +440,7 @@ public class Font5x7 {
             " 000 ",
             "00000",
             "     ",
-            "     "
+              "     "
     };
 
     static String[] dec = {

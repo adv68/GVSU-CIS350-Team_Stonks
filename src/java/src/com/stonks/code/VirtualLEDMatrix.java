@@ -10,15 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class VirtualLEDMatrix implements LEDMatrix {
-
     private JFrame frame;
-
     private JPanel panel;
-
     private LEDMatrixPanel matrixPanel;
 
     public VirtualLEDMatrix() {
-
         this.frame = new JFrame("Virtual LED Matrix");
 
         this.panel = new JPanel();
@@ -33,9 +29,7 @@ public class VirtualLEDMatrix implements LEDMatrix {
         this.frame.validate();
         this.frame.setVisible(true);
         this.frame.pack();
-
     }
-
 
     private class LEDMatrixPanel extends JPanel {
         ConcurrentHashMap<String, Diode> diodes;
@@ -56,7 +50,6 @@ public class VirtualLEDMatrix implements LEDMatrix {
 
         @Override
         protected void paintComponent(Graphics g) {
-
             super.paintComponent(g);
 
             Graphics2D panelBackground = (Graphics2D) g.create();
@@ -64,36 +57,22 @@ public class VirtualLEDMatrix implements LEDMatrix {
             panelBackground.fill(new Rectangle(this.getWidth(), this.getHeight()));
 
             diodes.forEach((key, diode) -> {
-                panelBackground.setColor(new Color(diode.r, diode.g, diode.b));
+                panelBackground.setColor(diode.c);
                 panelBackground.fill(new Ellipse2D.Double(diode.x * 16, diode.y * 16, 14, 14));
             });
         }
     }
 
     private static class Diode extends Point {
+        private Color c;
 
-        private int r;
-
-        private int g;
-
-        private int b;
-
-        public Diode(int x, int y, int r, int g, int b) {
-
+        public Diode(int x, int y, Color c) {
             super(x, y);
-            this.r = r;
-            this.g = g;
-            this.b = b;
-
+            this.c = c;
         }
-
     }
-
 
     public void setPixel(int x, int y, Color rgb) {
-
-        this.matrixPanel.add(new Diode(x, y, rgb.getRed(), rgb.getBlue(), rgb.getGreen()));
-
+        this.matrixPanel.add(new Diode(x, y, rgb));
     }
-
 }

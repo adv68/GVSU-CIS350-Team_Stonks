@@ -7,6 +7,8 @@ import yahoofinance.quotes.stock.StockQuote;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -16,12 +18,32 @@ public class StockTickerManager {
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
-    private Map<String, Stock> stocks;
+    private ConcurrentMap<String, Stock> stocks;
 
     private boolean initialized = false;
 
-    public StockTickerManager() {
+    private StockTickers stockTickers;
 
+    public StockTickerManager() {
+        stockTickers = new StockTickers(
+                "single",
+                "GME",
+                "GME",
+                "TSLA",
+                "GME",
+                "TSLA",
+                "F",
+                "AMC",
+                "MSFT"
+        );
+    }
+
+    public void setStockTickers(StockTickers tickers) {
+        this.stockTickers = tickers;
+    }
+
+    public StockTickers getStockTickers() {
+        return this.stockTickers;
     }
 
     public void initializeTickerList(ArrayList<String> tickerList) {
@@ -33,7 +55,7 @@ public class StockTickerManager {
                     for (int i = 0; i < tickerList.size(); i++) {
                         tickers[i] = tickerList.get(i);
                     }
-                    stocks = YahooFinance.get(tickers);
+                    stocks = new ConcurrentHashMap(YahooFinance.get(tickers));
                     initialized = true;
                 } catch (IOException e) {
                     e.printStackTrace();

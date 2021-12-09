@@ -7,10 +7,14 @@ import java.awt.*;
 import java.math.BigDecimal;
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LEDPanelUpdater implements Runnable {
     private StockTickerManager stockTickerManager;
@@ -30,31 +34,13 @@ public class LEDPanelUpdater implements Runnable {
     }
 
     // line is 0 - 3
-    private void writeToPanel (int line, StockQuote quote, String text) {
-
-        Color changeColor;
-        String marker;
-        if (quote.getChange().compareTo(new BigDecimal(0)) > 0) {
-            changeColor = new Color(0, 0, 255);
-            marker = "↑";
-        } else if (quote.getChange().compareTo(new BigDecimal(0)) < 0) {
-            changeColor = new Color(255, 0, 0);
-            marker = "↓";
-        } else {
-            changeColor = new Color(200, 200, 200);
-            marker = "-";
-        }
-
-        if (text.contains(quote.getSymbol())) {
-            text = text.replace(quote.getSymbol(), marker + quote.getSymbol());
-        }
-
+    private void writeToPanelMultiColor (int line, String text, Color color) {
         ArrayList<String[]> chars;
 
-        if (text.length() > 11) {
-            chars = Text5x7.getLetters(text.substring(0, 11));
+        if (text.length() > 10) {
+            chars = Text5x7.getLetters(text.substring(0, 10), color);
         } else {
-            chars = Text5x7.getLetters(text);
+            chars = Text5x7.getLetters(text, color);
         }
 
         for (int i = 0; i < 7; i++) {
@@ -65,21 +51,21 @@ public class LEDPanelUpdater implements Runnable {
             }
 
             for (int j = 0; j < row.length(); j++) {
-                if (row.charAt(j) == '0') {
-                    if (text.charAt(j / 6) == '↑' || text.charAt(j / 6) == '↓' || text.contains(".")) {
-                        ledMatrix.setPixel(j + 1, i + (line * 8), changeColor);
-                    } else {
-                        ledMatrix.setPixel(j + 1, i + (line * 8), new Color(255, 255, 255));
-                    }
+                if (row.charAt(j) != ' ') {
+                    ledMatrix.setPixel(j + 2, i + (line * 8), Text5x7.colors.get(row.charAt(j)));
                 } else {
-                    ledMatrix.setPixel(j + 1, i + (line * 8), new Color(0, 0, 0));
+                    ledMatrix.setPixel(j + 2, i + (line * 8), new Color(0, 0, 0));
                 }
             }
         }
     }
 
+    private void writeToPanel (int line, String text, Color color) {
+        writeToPanel(line, 0, text, color);
+    }
+
     // line is 0 - 3
-    private void writeToPanel (int line, int offset, String text, int r, int g, int b) {
+    private void writeToPanel (int line, int offset, String text, Color color) {
         ArrayList<String[]> chars;
         if (text.length() > (10 - offset)) {
             chars = Text5x7.getLetters(text.substring(0, (10 - offset)));
@@ -95,43 +81,68 @@ public class LEDPanelUpdater implements Runnable {
 
             for (int j = 0; j < row.length(); j++) {
                 if (row.charAt(j) == '0') {
-                    ledMatrix.setPixel(j + 2 + (offset * 6), i + 1 + (line * 8), r, g, b);
+                    ledMatrix.setPixel(j + 2 + (offset * 6), i + 1 + (line * 8), color);
                 } else {
-                    ledMatrix.setPixel(j + 2 + (offset * 6), i + 1 + (line * 8), 0, 0, 0);
+                    ledMatrix.setPixel(j + 2 + (offset * 6), i + 1 + (line * 8), new Color(0, 0, 0));
                 }
             }
         }
     }
 
     public void writeToPanel(int line, String text) {
-        writeToPanel(line, text, 255, 255, 255);
+        writeToPanel(line, text, new Color(255, 255, 255));
     }
 
     public void writeToPanel(int line, int offset, String text) {
-        writeToPanel(line, offset, text, 255, 255, 255);
+        writeToPanel(line, offset, text, new Color(255, 255, 255));
     }
 
     public void writeMarketStatus() {
         ZonedDateTime dateTime = ZonedDateTime.now(TimeZone.getTimeZone("EST").toZoneId());
         if (dateTime.getHour() < 16 && dateTime.getHour() > 9 || (dateTime.getHour() == 9 && dateTime.getMinute() >= 30)) {
             for (int i = 2; i < 62; i++) {
-                ledMatrix.setPixel(i, 0, 0, 255, 0);
+                ledMatrix.setPixel(i, 0, new Color(0, 255, 0));
             }
         } else {
             for (int i = 2; i < 62; i++) {
-                ledMatrix.setPixel(i, 0, 150, 150, 150);
+                ledMatrix.setPixel(i, 0, new Color (200, 200, 200));
             }
         }
     }
 
     @Override
     public void run() {
+        LEDPanelScrollingText doubleScroll1 = new LEDPanelScrollingText(1, ledMatrix);
+        LEDPanelScrollingText doubleScroll2 = new LEDPanelScrollingText(3, ledMatrix);
+        LEDPanelScrollingText manyScroll = new LEDPanelScrollingText(3, ledMatrix);
+
+
+        StockTickers prevTickers = stockTickerManager.getStockTickers();
+        StockTickers stockTickers = stockTickerManager.getStockTickers();
+
         for (;;) {
-            StockTickers stockTickers = DatabaseQuery.getStockTickers(connectionUrl, username, password);
+            prevTickers = stockTickers;
+            stockTickers = stockTickerManager.getStockTickers();
             writeMarketStatus();
 
-
             if (stockTickers.getLayoutStyle().equals("single")) {
+                if (doubleScroll1.isRunning()) {
+                    doubleScroll1.stop();
+                }
+                if (doubleScroll2.isRunning()) {
+                    doubleScroll2.stop();
+                }
+                if (manyScroll.isRunning()) {
+                    manyScroll.stop();
+                }
+
+                if (!prevTickers.getLayoutStyle().equals(stockTickers.getLayoutStyle()) || !prevTickers.getSingleTicker().equals(stockTickers.getSingleTicker())) {
+                    writeToPanel(0, "          ");
+                    writeToPanel(1, "          ");
+                    writeToPanel(2, "          ");
+                    writeToPanel(3, "          ");
+                }
+
                 Stock stock = stockTickerManager.getStock(stockTickers.getSingleTicker());
 
                 if (stock.getName().length() <= 10) {
@@ -140,68 +151,138 @@ public class LEDPanelUpdater implements Runnable {
                     writeToPanel(0, stock.getSymbol());
                 }
 
-                writeToPanel(1, stock.getQuote().getPrice().toString());
+                writeToPanel(1, stock.getQuote().getPrice().setScale(2, RoundingMode.HALF_UP).toString());
 
                 BigDecimal change = stock.getQuote().getChange();
                 if (change.compareTo(new BigDecimal(0)) < 0) {
-                    writeToPanel(2, change.toString(), 255, 0, 0);
+                    writeToPanel(2, change.setScale(2, RoundingMode.HALF_UP).toString(), new Color(255, 0, 0));
                 } else if (change.compareTo(new BigDecimal(0)) > 0) {
-                    writeToPanel(2, change.toString(), 0, 255, 0);
+                    writeToPanel(2, "+" + change.setScale(2, RoundingMode.HALF_UP).toString(), new Color(0, 255, 0));
                 } else {
-                    writeToPanel(2, change.toString(), 200, 200, 200);
+                    writeToPanel(2, change.toString());
                 }
 
-                long volume = stock.getQuote().getVolume();
-                if (volume < 1000) {
+                BigDecimal volume = new BigDecimal(stock.getQuote().getVolume());
+                if (volume.compareTo(new BigDecimal(1000)) < 0) {
                     writeToPanel(3, "Vol " + volume);
-                } else if (volume < 1000000) {
-                    writeToPanel(3, "Vol " + volume / 1000 + "K");
-                } else if (volume < 1000000000) {
-                    writeToPanel(3, "Vol " + volume / 1000000 + "M");
-                } else if (volume < 1000000000000L){
-                    writeToPanel(3, "Vol " + volume / 1000000000 + "B");
+                } else if (volume.compareTo(new BigDecimal(10000)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000), 2, RoundingMode.HALF_UP) + "K");
+                } else if (volume.compareTo(new BigDecimal(100000)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000), 1, RoundingMode.HALF_UP) + "K");
+                } else if (volume.compareTo(new BigDecimal(1000000)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000), 0, RoundingMode.HALF_UP) + "K");
+                } else if (volume.compareTo(new BigDecimal(10000000)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000000), 2, RoundingMode.HALF_UP) + "M");
+                } else if (volume.compareTo(new BigDecimal(100000000)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000000), 1, RoundingMode.HALF_UP) + "M");
+                } else if (volume.compareTo(new BigDecimal(1000000000)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000000), 0, RoundingMode.HALF_UP) + "M");
+                } else if (volume.compareTo(new BigDecimal(10000000000L)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000000000), 2, RoundingMode.HALF_UP) + "B");
+                } else if (volume.compareTo(new BigDecimal(100000000000L)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000000000), 1, RoundingMode.HALF_UP) + "B");
+                } else if (volume.compareTo(new BigDecimal(1000000000000L)) < 0) {
+                    writeToPanel(3, "Vol " + volume.divide(new BigDecimal(1000000000), 0, RoundingMode.HALF_UP) + "B");
                 }
-            }
-            if (stockTickers.getLayoutStyle().equals("double")) {
+            } else if (stockTickers.getLayoutStyle().equals("double")) {
+                if (manyScroll.isRunning()) {
+                    manyScroll.stop();
+                }
+
+                if (!prevTickers.getLayoutStyle().equals(stockTickers.getLayoutStyle()) || !prevTickers.getDoubleTicker1().equals(stockTickers.getDoubleTicker1()) || !prevTickers.getDoubleTicker2().equals(stockTickers.getDoubleTicker2())) {
+                    writeToPanel(0, "          ");
+                    writeToPanel(2, "          ");
+                }
+
                 StockQuote quote1 = stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1());
                 StockQuote quote2 = stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2());
 
-                writeToPanel(0, quote1, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1()).getSymbol());
-                writeToPanel(1, quote1, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1()).getPrice().toString());
+                writeToPanel(0, stockTickers.getDoubleTicker1());
+                writeToPanel(2, stockTickers.getDoubleTicker2());
 
-                writeToPanel(2, quote2, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2()).getSymbol());
-                writeToPanel(3, quote2, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2()).getPrice().toString());
-            }
-            if (stockTickers.getLayoutStyle().equals("many")) {
+                if (!doubleScroll1.isRunning()) {
+                    ConcurrentHashMap<String, ScrollObject> double1attrib = new ConcurrentHashMap<>();
+                    double1attrib.put("Price", new ScrollObject(quote1.getPrice().setScale(2, RoundingMode.HALF_UP)));
+                    double1attrib.put("Chng", new ScrollObject(quote1.getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    doubleScroll1.setValues(double1attrib);
+                    doubleScroll1.start();
+                } else {
+                    doubleScroll1.updateValues("Price", new ScrollObject(quote1.getPrice().setScale(2, RoundingMode.HALF_UP)));
+                    doubleScroll1.updateValues("Chng", new ScrollObject(quote1.getChange().setScale(2, RoundingMode.HALF_UP), true));
+                }
+
+                if (!doubleScroll2.isRunning()) {
+                    ConcurrentHashMap<String, ScrollObject> double2attrib = new ConcurrentHashMap<>();
+                    double2attrib.put("Price", new ScrollObject(quote2.getPrice().setScale(2, RoundingMode.HALF_UP)));
+                    double2attrib.put("Chng", new ScrollObject(quote2.getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    doubleScroll2.setValues(double2attrib);
+                    doubleScroll2.start();
+                } else {
+                    doubleScroll2.updateValues("Price", new ScrollObject(quote2.getPrice().setScale(2, RoundingMode.HALF_UP)));
+                    doubleScroll2.updateValues("Chng", new ScrollObject(quote2.getChange().setScale(2, RoundingMode.HALF_UP), true));
+                }
+            } else {
+                if (doubleScroll1.isRunning()) {
+                    doubleScroll1.stop();
+                }
+                if (doubleScroll2.isRunning()) {
+                    doubleScroll2.stop();
+                }
+
+                if (!prevTickers.getLayoutStyle().equals(stockTickers.getLayoutStyle()) || !prevTickers.getManyTicker1().equals(stockTickers.getManyTicker1())) {
+                    writeToPanel(0, "          ");
+                    writeToPanel(1, "          ");
+                    writeToPanel(2, "          ");
+                }
+
                 StockQuote quote1 = stockTickerManager.getStockQuote(stockTickers.getManyTicker1());
                 StockQuote quote2 = stockTickerManager.getStockQuote(stockTickers.getManyTicker2());
                 StockQuote quote3 = stockTickerManager.getStockQuote(stockTickers.getManyTicker3());
                 StockQuote quote4 = stockTickerManager.getStockQuote(stockTickers.getManyTicker4());
+                StockQuote quote5 = stockTickerManager.getStockQuote(stockTickers.getManyTicker5());
 
-                writeToPanel(0, quote1, stockTickerManager.getStockQuote(stockTickers.getManyTicker1()).getSymbol());
-                writeToPanel(1, quote2, stockTickerManager.getStockQuote(stockTickers.getManyTicker2()).getSymbol());
-                writeToPanel(2, quote3, stockTickerManager.getStockQuote(stockTickers.getManyTicker3()).getSymbol());
-                writeToPanel(3, quote4, stockTickerManager.getStockQuote(stockTickers.getManyTicker4()).getSymbol());
+                writeToPanel(0, stockTickers.getManyTicker1());
+                writeToPanel(1, stockTickerManager.getStockQuote(stockTickers.getManyTicker1()).getPrice().setScale(2, RoundingMode.HALF_UP).toString());
+
+                BigDecimal change = stockTickerManager.getStockQuote(stockTickers.getManyTicker1()).getChange();
+                if (change.compareTo(new BigDecimal(0)) < 0) {
+                    writeToPanel(2, change.setScale(2, RoundingMode.HALF_UP).toString(), new Color(255, 0, 0));
+                } else if (change.compareTo(new BigDecimal(0)) > 0) {
+                    writeToPanel(2, "+" + change.setScale(2, RoundingMode.HALF_UP).toString(), new Color(0, 255, 0));
+                } else {
+                    writeToPanel(2, change.toString());
+                }
+
+                if (!manyScroll.isRunning()) {
+                    ConcurrentHashMap<String, ScrollObject> manyStocks = new ConcurrentHashMap<>();
+                    manyStocks.put(stockTickers.getManyTicker2(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker2()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyStocks.put(stockTickers.getManyTicker3(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker3()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyStocks.put(stockTickers.getManyTicker4(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker4()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyStocks.put(stockTickers.getManyTicker5(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker5()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyScroll.setValues(manyStocks);
+                    manyScroll.start();
+                } else {
+                    if (!prevTickers.getManyTicker2().equals(stockTickers.getManyTicker2())) {
+                        manyScroll.changeKey(prevTickers.getManyTicker2(), stockTickers.getManyTicker2());
+                    }
+                    if (!prevTickers.getManyTicker3().equals(stockTickers.getManyTicker3())) {
+                        manyScroll.changeKey(prevTickers.getManyTicker3(), stockTickers.getManyTicker3());
+                    }
+                    if (!prevTickers.getManyTicker4().equals(stockTickers.getManyTicker4())) {
+                        manyScroll.changeKey(prevTickers.getManyTicker4(), stockTickers.getManyTicker4());
+                    }
+                    if (!prevTickers.getManyTicker5().equals(stockTickers.getManyTicker5())) {
+                        manyScroll.changeKey(prevTickers.getManyTicker5(), stockTickers.getManyTicker5());
+                    }
+                    manyScroll.updateValues(stockTickers.getManyTicker2(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker2()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyScroll.updateValues(stockTickers.getManyTicker3(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker3()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyScroll.updateValues(stockTickers.getManyTicker4(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker4()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                    manyScroll.updateValues(stockTickers.getManyTicker5(), new ScrollObject(stockTickerManager.getStockQuote(stockTickers.getManyTicker5()).getChange().setScale(2, RoundingMode.HALF_UP), true));
+                }
             }
 
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-
-            }
-            /*
-            writeToPanel(0, stockTickers.getDoubleTicker1());
-            writeToPanel(1, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker1()).getPrice().toString());
-            writeToPanel(2, stockTickers.getDoubleTicker2());
-            writeToPanel(3, stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2()).getPrice().toString());
-
-            System.out.println(stockTickers.getSingleTicker());
-            System.out.println(stockTickerManager.getStockQuote(stockTickers.getSingleTicker()));
-            System.out.println(stockTickers.getDoubleTicker2());
-            System.out.println(stockTickerManager.getStockQuote(stockTickers.getDoubleTicker2()));
-
-            try {
-                Thread.sleep(5000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
 
             }

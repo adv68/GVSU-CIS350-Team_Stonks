@@ -24,6 +24,9 @@ public class DatabaseMonitor implements Runnable {
 
         for (;;) {
             StockTickers tickersFromDB = DatabaseQuery.getStockTickers(connectionUrl, username, password);
+
+            stockTickerManager.setStockTickers(tickersFromDB);
+
             if (increment == 0) {
                 stockTickerManager.setTickerList(tickersFromDB.getList(), true);
             } else {

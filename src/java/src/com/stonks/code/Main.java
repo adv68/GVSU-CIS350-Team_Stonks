@@ -8,6 +8,13 @@ public class Main {
         DatabaseMonitor databaseMonitor = new DatabaseMonitor(stockTickerManager);
         databaseMonitor.start();
 
+        // wait for databaseMonitor to initialize
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+
+        }
+
         YahooFinanceMonitor yahooFinanceMonitor = new YahooFinanceMonitor(stockTickerManager);
         yahooFinanceMonitor.start();
 

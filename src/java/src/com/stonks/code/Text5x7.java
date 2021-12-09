@@ -1,109 +1,136 @@
 package com.stonks.code;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.stonks.code.Font5x7.*;
 
 public class Text5x7 {
+    public static HashMap<Character, Color> colors = new HashMap<>(){{
+        put('0', new Color(255, 255, 255));
+        put('r', new Color(255, 0, 0));
+        put('g', new Color(0, 255, 0));
+    }};
+
     public static ArrayList<String[]> getLetters(String str) {
         ArrayList<String[]> list = new ArrayList<>();
         char [] array = str.toUpperCase().toCharArray();
         for(char ch : array) {
             if (ch == 'A') {
-                list.add(a);
+                list.add(a.clone());
             } else if (ch == 'B') {
-                list.add(b);
+                list.add(b.clone());
             } else if (ch == 'C') {
-                list.add(c);
+                list.add(c.clone());
             } else if (ch == 'D') {
-                list.add(d);
+                list.add(d.clone());
             } else if (ch == 'E') {
-                list.add(e);
+                list.add(e.clone());
             } else if (ch == 'F') {
-                list.add(f);
+                list.add(f.clone());
             } else if (ch == 'G') {
-                list.add(g);
+                list.add(g.clone());
             } else if (ch == 'H') {
-                list.add(h);
+                list.add(h.clone());
             } else if (ch == 'I') {
-                list.add(i);
+                list.add(i.clone());
             } else if (ch == 'J') {
-                list.add(j);
+                list.add(j.clone());
             } else if (ch == 'K') {
-                list.add(k);
+                list.add(k.clone());
             } else if (ch == 'L') {
-                list.add(l);
+                list.add(l.clone());
             } else if (ch == 'M') {
-                list.add(m);
+                list.add(m.clone());
             } else if (ch == 'N') {
-                list.add(n);
+                list.add(n.clone());
             } else if (ch == 'O') {
-                list.add(o);
+                list.add(o.clone());
             } else if (ch == 'P') {
-                list.add(p);
+                list.add(p.clone());
             } else if (ch == 'Q') {
-                list.add(q);
+                list.add(q.clone());
             } else if (ch == 'R') {
-                list.add(r);
+                list.add(r.clone());
             } else if (ch == 'S') {
-                list.add(s);
+                list.add(s.clone());
             } else if (ch == 'T') {
-                list.add(t);
+                list.add(t.clone());
             } else if (ch == 'U') {
-                list.add(u);
+                list.add(u.clone());
             } else if (ch == 'V') {
-                list.add(v);
+                list.add(v.clone());
             } else if (ch == 'W') {
-                list.add(w);
+                list.add(w.clone());
             } else if (ch == 'X') {
-                list.add(x);
+                list.add(x.clone());
             } else if (ch == 'Y') {
-                list.add(y);
+                list.add(y.clone());
             } else if (ch == 'Z') {
-                list.add(z);
+                list.add(z.clone());
             } else if (ch == '0') {
-                list.add(zero);
+                list.add(zero.clone());
             } else if (ch == '1') {
-                list.add(one);
+                list.add(one.clone());
             } else if (ch == '2') {
-                list.add(two);
+                list.add(two.clone());
             } else if (ch == '3') {
-                list.add(three);
+                list.add(three.clone());
             } else if (ch == '4') {
-                list.add(four);
+                list.add(four.clone());
             } else if (ch == '5') {
-                list.add(five);
+                list.add(five.clone());
             } else if (ch == '6') {
-                list.add(six);
+                list.add(six.clone());
             } else if (ch == '7') {
-                list.add(seven);
+                list.add(seven.clone());
             } else if (ch == '8') {
-                list.add(eight);
+                list.add(eight.clone());
             } else if (ch == '9') {
-                list.add(nine);
+                list.add(nine.clone());
             } else if (ch == '.') {
-                list.add(decimal);
+                list.add(decimal.clone());
             } else if (ch == ':') {
-                list.add(colon);
+                list.add(colon.clone());
             } else if (ch == '$') {
-                list.add(dollar);
+                list.add(dollar.clone());
             } else if (ch == '%') {
-                list.add(percent);
+                list.add(percent.clone());
             } else if (ch == '-') {
-                list.add(minus);
+                list.add(minus.clone());
             } else if (ch == '+') {
-                list.add(plus);
+                list.add(plus.clone());
             } else if (ch == ' ') {
-                list.add(space);
+                list.add(space.clone());
             } else if (ch == '↑') {     //alt + 24
-                list.add(inc);
+                list.add(inc.clone());
             } else if (ch == '↓') {     //alt + 25
-                list.add(dec);
+                list.add(dec.clone());
             } else if (ch == '|') {
-                list.add(bar);
+                list.add(bar.clone());
             }
         }
         return list;
+    }
+
+    public static ArrayList<String[]> getLetters(String str, Color color) {
+        ArrayList<String[]> temp = getLetters(str);
+        for (char c : colors.keySet()) {
+            if (
+                    colors.get(c).getRed() == color.getRed() &&
+                    colors.get(c).getGreen() == color.getGreen() &&
+                    colors.get(c).getBlue() == color.getBlue()
+            ) {
+                for (String[] strings : temp) {
+                    for (int j = 0; j < strings.length; j++) {
+                        strings[j] = strings[j].replace('0', c);
+                    }
+                }
+                break;
+            }
+        }
+        return temp;
     }
 
     static int getWidth(String text) {
