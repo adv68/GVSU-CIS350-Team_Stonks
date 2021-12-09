@@ -7,9 +7,11 @@ public class DatabaseMonitor implements Runnable {
 
     private final int GARBAGE_COLLECT_CYCLE_RATE = 25;
 
-    private StockTickerManager stockTickerManager;
+    //private StockTickerManager stockTickerManager;
+    private StockTickerMngr stockTickerManager;
 
-    public DatabaseMonitor(StockTickerManager stockTickerManager) {
+    //public DatabaseMonitor(StockTickerManager stockTickerManager) {
+    public DatabaseMonitor(StockTickerMngr stockTickerManager) {
         this.stockTickerManager = stockTickerManager;
     }
 
@@ -25,19 +27,24 @@ public class DatabaseMonitor implements Runnable {
         for (;;) {
             StockTickers tickersFromDB = DatabaseQuery.getStockTickers(connectionUrl, username, password);
 
-            stockTickerManager.setStockTickers(tickersFromDB);
+            //stockTickerManager.setStockTickers(tickersFromDB);
+            stockTickerManager.updateTickers(tickersFromDB);
 
+            /*
             if (increment == 0) {
                 stockTickerManager.setTickerList(tickersFromDB.getList(), true);
             } else {
                 stockTickerManager.setTickerList(tickersFromDB.getList(), false);
             }
 
+
+
             increment++;
 
             if (increment > GARBAGE_COLLECT_CYCLE_RATE) {
                 increment = 0;
             }
+            */
 
             try {
                 Thread.sleep(5000);

@@ -17,13 +17,12 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LEDPanelUpdater implements Runnable {
-    private StockTickerManager stockTickerManager;
+    //private StockTickerManager stockTickerManager;
+    private StockTickerMngr stockTickerManager;
     private LEDMatrix ledMatrix;
-    private final String connectionUrl = "jdbc:mysql://localhost:3306/stonks";
-    private final String username = "root";
-    private final String password = "";
 
-    public LEDPanelUpdater(StockTickerManager stockTickerManager, LEDMatrix ledMatrix) {
+    //public LEDPanelUpdater(StockTickerManager stockTickerManager, LEDMatrix ledMatrix) {
+    public LEDPanelUpdater(StockTickerMngr stockTickerManager, LEDMatrix ledMatrix) {
         this.stockTickerManager = stockTickerManager;
         this.ledMatrix = ledMatrix;
     }
@@ -117,12 +116,15 @@ public class LEDPanelUpdater implements Runnable {
         LEDPanelScrollingText manyScroll = new LEDPanelScrollingText(3, ledMatrix);
 
 
-        StockTickers prevTickers = stockTickerManager.getStockTickers();
-        StockTickers stockTickers = stockTickerManager.getStockTickers();
+        //StockTickers prevTickers = stockTickerManager.getStockTickers();
+        //StockTickers stockTickers = stockTickerManager.getStockTickers();
+        StockTickers prevTickers = stockTickerManager.getStockTickersSelected();
+        StockTickers stockTickers = stockTickerManager.getStockTickersSelected();
 
         for (;;) {
             prevTickers = stockTickers;
-            stockTickers = stockTickerManager.getStockTickers();
+            //stockTickers = stockTickerManager.getStockTickers();
+            stockTickers = stockTickerManager.getStockTickersSelected();
             writeMarketStatus();
 
             if (stockTickers.getLayoutStyle().equals("single")) {

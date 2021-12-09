@@ -1,9 +1,11 @@
 package com.stonks.code;
 
 public class YahooFinanceMonitor implements Runnable {
-    private StockTickerManager stockTickerManager;
+    //private StockTickerManager stockTickerManager;
+    private StockTickerMngr stockTickerManager;
 
-    public YahooFinanceMonitor(StockTickerManager stockTickerManager) {
+    //public YahooFinanceMonitor(StockTickerManager stockTickerManager) {
+    public YahooFinanceMonitor(StockTickerMngr stockTickerManager) {
         this.stockTickerManager = stockTickerManager;
     }
 
@@ -15,7 +17,8 @@ public class YahooFinanceMonitor implements Runnable {
     @Override
     public void run() {
         for (;;) {
-            stockTickerManager.refreshQuotes();
+            //stockTickerManager.refreshQuotes();
+            stockTickerManager.updateQuotes();
 
             try {
                 Thread.sleep(5000);

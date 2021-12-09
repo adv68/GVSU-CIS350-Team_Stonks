@@ -1,10 +1,7 @@
 package com.stonks.code;
 
-import com.sun.source.tree.Scope;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LEDPanelScrollingText implements Runnable {
@@ -88,10 +85,7 @@ public class LEDPanelScrollingText implements Runnable {
         int currChar = 0;
         int charRowOffset = 0;
 
-        //String[] keys = values.keySet().toArray(new String[0]);
-
         while (run) {
-            //String[] keys = values.keySet().toArray(new String[0]);
             String[] keys = valuesKeySet;
 
             ArrayList<String[]> panelText = new ArrayList<>(Text5x7.getLetters(keys[currValue] + " - "));
