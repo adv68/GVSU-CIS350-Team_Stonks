@@ -1,7 +1,8 @@
 # Install Guide
 
 This is a guide to installing all the tools necessary to build and run the project.
-A more detailed guide on setting up the project can be found here [here](/docs/RunningTheProject.docx)
+
+A more detailed guide on setting up the project can be found [here](/docs/RunningTheProject.docx)
 
 ## Development Environment
 
