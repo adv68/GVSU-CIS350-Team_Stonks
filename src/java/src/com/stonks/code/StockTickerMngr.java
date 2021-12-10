@@ -71,4 +71,14 @@ public class StockTickerMngr {
     public StockTickers getStockTickersSelected() {
         return tickers;
     }
+
+    public static boolean tryYahooFinance() {
+        try {
+            Stock test = YahooFinance.get("GME");
+            StockQuote stockQuote = test.getQuote(true);
+            return stockQuote.getPrice() != null;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }

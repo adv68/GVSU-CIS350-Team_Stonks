@@ -17,14 +17,18 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LEDPanelUpdater implements Runnable {
-    //private StockTickerManager stockTickerManager;
     private StockTickerMngr stockTickerManager;
     private LEDMatrix ledMatrix;
 
-    //public LEDPanelUpdater(StockTickerManager stockTickerManager, LEDMatrix ledMatrix) {
     public LEDPanelUpdater(StockTickerMngr stockTickerManager, LEDMatrix ledMatrix) {
         this.stockTickerManager = stockTickerManager;
         this.ledMatrix = ledMatrix;
+
+        for (int i = 0; i < 64; i++) {
+            for (int j = 0; j < 32; j++) {
+                ledMatrix.setPixel(i, j, new Color(0, 0, 0));
+            }
+        }
     }
 
     public void start() {
@@ -115,15 +119,11 @@ public class LEDPanelUpdater implements Runnable {
         LEDPanelScrollingText doubleScroll2 = new LEDPanelScrollingText(3, ledMatrix);
         LEDPanelScrollingText manyScroll = new LEDPanelScrollingText(3, ledMatrix);
 
-
-        //StockTickers prevTickers = stockTickerManager.getStockTickers();
-        //StockTickers stockTickers = stockTickerManager.getStockTickers();
         StockTickers prevTickers = stockTickerManager.getStockTickersSelected();
         StockTickers stockTickers = stockTickerManager.getStockTickersSelected();
 
         for (;;) {
             prevTickers = stockTickers;
-            //stockTickers = stockTickerManager.getStockTickers();
             stockTickers = stockTickerManager.getStockTickersSelected();
             writeMarketStatus();
 

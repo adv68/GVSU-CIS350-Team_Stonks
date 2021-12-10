@@ -36,4 +36,25 @@ public class DatabaseQuery {
         }
         return defaultData;
     }
+
+    public static boolean tryDB(String url, String user, String pwd) {
+        try (Connection connection = DriverManager.getConnection(url, user, pwd)) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM settings WHERE id = 1");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            String s;
+            s = resultSet.getString("layoutStyle");
+            s = resultSet.getString("singleTicker");
+            s = resultSet.getString("doubleTicker1");
+            s = resultSet.getString("doubleTicker2");
+            s = resultSet.getString("manyTicker1");
+            s = resultSet.getString("manyTicker2");
+            s = resultSet.getString("manyTicker3");
+            s = resultSet.getString("manyTicker4");
+            s = resultSet.getString("manyTicker5");
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

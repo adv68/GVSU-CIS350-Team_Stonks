@@ -29,6 +29,7 @@ public class VirtualLEDMatrix implements LEDMatrix {
         this.frame.validate();
         this.frame.setVisible(true);
         this.frame.pack();
+        this.frame.setResizable(false);
     }
 
     private class LEDMatrixPanel extends JPanel {

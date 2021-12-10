@@ -6,7 +6,6 @@ import com.stonks.code.ScrollObject;
 import com.stonks.code.VirtualLEDMatrix;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ScrollingTextTest {

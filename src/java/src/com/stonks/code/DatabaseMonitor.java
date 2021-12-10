@@ -4,47 +4,32 @@ public class DatabaseMonitor implements Runnable {
     private final String connectionUrl = "jdbc:mysql://localhost:3306/stonks";
     private final String username = "root";
     private final String password = "";
+    private boolean run = true;
 
-    private final int GARBAGE_COLLECT_CYCLE_RATE = 25;
-
-    //private StockTickerManager stockTickerManager;
     private StockTickerMngr stockTickerManager;
 
-    //public DatabaseMonitor(StockTickerManager stockTickerManager) {
     public DatabaseMonitor(StockTickerMngr stockTickerManager) {
         this.stockTickerManager = stockTickerManager;
     }
 
     public void start() {
+        run = true;
         Thread t = new Thread(this);
         t.start();
+    }
+
+    public void stop() {
+        run = false;
     }
 
     @Override
     public void run() {
         int increment = 0;
 
-        for (;;) {
+        while (run) {
             StockTickers tickersFromDB = DatabaseQuery.getStockTickers(connectionUrl, username, password);
 
-            //stockTickerManager.setStockTickers(tickersFromDB);
             stockTickerManager.updateTickers(tickersFromDB);
-
-            /*
-            if (increment == 0) {
-                stockTickerManager.setTickerList(tickersFromDB.getList(), true);
-            } else {
-                stockTickerManager.setTickerList(tickersFromDB.getList(), false);
-            }
-
-
-
-            increment++;
-
-            if (increment > GARBAGE_COLLECT_CYCLE_RATE) {
-                increment = 0;
-            }
-            */
 
             try {
                 Thread.sleep(5000);
