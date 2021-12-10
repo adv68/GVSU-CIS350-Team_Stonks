@@ -5,6 +5,7 @@ import yahoofinance.YahooFinance;
 import yahoofinance.quotes.stock.StockQuote;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StockTickerMngr {
@@ -55,13 +56,20 @@ public class StockTickerMngr {
                 stockData.get(key).getQuote(true);
             } catch (IOException e) {
                 System.out.println("ERROR: Cannot connect to yahoo finance to update quote");
-                stockData.get(key).setQuote(new StockQuote(key));
             }
         }
     }
 
     public StockQuote getStockQuote(String ticker) {
-        return stockData.get(ticker).getQuote();
+        StockQuote quote = stockData.get(ticker).getQuote();
+        if (quote.getPrice() == null) {
+            StockQuote empty = new StockQuote(ticker);
+            empty.setPrice(new BigDecimal("-1.0"));
+            empty.setPreviousClose(new BigDecimal("-1.0"));
+            empty.setVolume(0L);
+            return empty;
+        }
+        return quote;
     }
 
     public Stock getStock(String ticker) {

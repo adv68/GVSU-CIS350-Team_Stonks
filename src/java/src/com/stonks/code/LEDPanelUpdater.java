@@ -1,18 +1,12 @@
 package com.stonks.code;
 
-import yahoofinance.Stock;
 import yahoofinance.quotes.stock.StockQuote;
 
 import java.awt.*;
 import java.math.BigDecimal;
-import javax.swing.*;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -145,17 +139,12 @@ public class LEDPanelUpdater implements Runnable {
                     writeToPanel(3, "          ");
                 }
 
-                Stock stock = stockTickerManager.getStock(stockTickers.getSingleTicker());
+                StockQuote quote = stockTickerManager.getStockQuote(stockTickers.getSingleTicker());
 
-                if (stock.getName().length() <= 10) {
-                    writeToPanel(0, stock.getName());
-                } else {
-                    writeToPanel(0, stock.getSymbol());
-                }
+                writeToPanel(0, stockTickers.getSingleTicker());
+                writeToPanel(1, quote.getPrice().setScale(2, RoundingMode.HALF_UP).toString());
 
-                writeToPanel(1, stock.getQuote().getPrice().setScale(2, RoundingMode.HALF_UP).toString());
-
-                BigDecimal change = stock.getQuote().getChange();
+                BigDecimal change = quote.getChange();
                 if (change.compareTo(new BigDecimal(0)) < 0) {
                     writeToPanel(2, change.setScale(2, RoundingMode.HALF_UP).toString(), new Color(255, 0, 0));
                 } else if (change.compareTo(new BigDecimal(0)) > 0) {
@@ -164,7 +153,7 @@ public class LEDPanelUpdater implements Runnable {
                     writeToPanel(2, change.toString());
                 }
 
-                BigDecimal volume = new BigDecimal(stock.getQuote().getVolume());
+                BigDecimal volume = new BigDecimal(quote.getVolume());
                 if (volume.compareTo(new BigDecimal(1000)) < 0) {
                     writeToPanel(3, "Vol " + volume);
                 } else if (volume.compareTo(new BigDecimal(10000)) < 0) {
@@ -236,12 +225,6 @@ public class LEDPanelUpdater implements Runnable {
                     writeToPanel(1, "          ");
                     writeToPanel(2, "          ");
                 }
-
-                StockQuote quote1 = stockTickerManager.getStockQuote(stockTickers.getManyTicker1());
-                StockQuote quote2 = stockTickerManager.getStockQuote(stockTickers.getManyTicker2());
-                StockQuote quote3 = stockTickerManager.getStockQuote(stockTickers.getManyTicker3());
-                StockQuote quote4 = stockTickerManager.getStockQuote(stockTickers.getManyTicker4());
-                StockQuote quote5 = stockTickerManager.getStockQuote(stockTickers.getManyTicker5());
 
                 writeToPanel(0, stockTickers.getManyTicker1());
                 writeToPanel(1, stockTickerManager.getStockQuote(stockTickers.getManyTicker1()).getPrice().setScale(2, RoundingMode.HALF_UP).toString());

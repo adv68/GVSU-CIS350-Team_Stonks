@@ -52,7 +52,7 @@ public class DatabaseQuery {
             s = resultSet.getString("manyTicker3");
             s = resultSet.getString("manyTicker4");
             s = resultSet.getString("manyTicker5");
-            return true;    
+            return true;
         } catch (SQLException e) {
             return false;
         }
