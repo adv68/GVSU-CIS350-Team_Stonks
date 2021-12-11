@@ -78,7 +78,7 @@ Contents below in this markdown file include three categories of functional and 
 | UT1 | Unit test 1 tests the market open algorithm. Run [com.stonks.test.MarketOpenTest.java](../src/java/src/com/stonks/test/MarketOpenTest.java) and view the output to determine the result of the test |
 | UT2 | Unit test 2 tests the scrolling text function. Run [com.stonks.test.ScrollingTextTest.java](../src/java/src/com/stonks/test/ScrollingTextTest.java) and view the outputs to determine the result of the test |
 | UT3 | Unit test 3 tests the 5x7 font used on the matrix. Run [com.stonks.test.FontTest.java](../src/java/src/com/stonks/test/FontTest.java) and view the output to determine the results of the test |
-| UT4 | Unit test 4 tests to make sure the web user interface is secured by a password. Open a new private browsing window to ensure there are no active sessions. Navigate to (localhost/home.php)[http://localhost/home.php] (or the IP address if on a different device). If the website redirects you to the signin page, the test passes |
+| UT4 | Unit test 4 tests to make sure the web user interface is secured by a password. Open a new private browsing window to ensure there are no active sessions. Navigate to [localhost/home.php](http://localhost/home.php) (or the IP address if on a different device). If the website redirects you to the signin page, the test passes |
 
 ## Integration Tests
 
