@@ -34,5 +34,9 @@ public class SQLTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        System.out.println();
+        System.out.println("Navigate to PhpMyAdmin or use the SQL terminal to determine the current values in the database.");
+        System.out.println("If the values match what was output, the test passes. If not the test fails.");
     }
 }

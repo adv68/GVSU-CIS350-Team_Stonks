@@ -19,7 +19,7 @@ public class ScrollingTextTest {
 
         ConcurrentHashMap<String, ScrollObject> map = new ConcurrentHashMap<>();
         map.put("GME", new ScrollObject(new BigDecimal("189.24")));
-        map.put("AMC", new ScrollObject(new BigDecimal("-34.23"), true));
+        map.put("AMC", new ScrollObject(new BigDecimal("34.23")));
         map.put("TSLA", new ScrollObject(new BigDecimal("1023.78")));
 
         scrollingText.setValues(map);
@@ -34,5 +34,8 @@ public class ScrollingTextTest {
         scrollingText4.setValues(map);
         scrollingText4.start();
 
+        System.out.println("A Virtual LED Matrix should have opened and displayed 4 rows of scrolling text.");
+        System.out.println("The scrolling test should display the values coded into the class.");
+        System.out.println("If this is the case, the test has passed and you can close the window. Otherwise, the test has failed.");
     }
 }
